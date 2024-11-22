@@ -322,24 +322,15 @@ const dummyStats = updateStatsInfo({
 });
 
 // execute stats display
-const fetchStatsInfo = async function() {
+async function fetchStatsInfo() {
     let statsAndStreaks = await fetch("./stats-and-streaks.json")
         .then(response => response.json())
         .then(json => json.results);
 
-    statsInfo = updateStatsInfo(statsAndStreaks)
-
-    return statsInfo
-    console.log(statsInfo)
-
-    const statsRootElement = document.getElementById("stats-root");
-    console.log(buildStatsSummary(statsInfo))
-    console.log(buildStatsDaily(statsInfo))
+    return statsAndStreaks
 };
 
-function updateStatsContent() {
-    const statsInfo = dummyStats
-
+function buildStatsContent(statsInfo) {
     const statsRoot = document.getElementById("stats-root");
     while (statsRoot.lastElementChild) {
         statsRoot.removeChild(statsRoot.lastElementChild);
@@ -353,4 +344,19 @@ function updateStatsContent() {
     applyEvent()
 };
 
-updateStatsContent()
+async function renderStatsContent() {
+    const timeout = 5000;
+    let statsInfo = dummyStats;
+
+    try {
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), timeout))
+        statsInfo = await Promise.race([fetchStatsInfo(), timeoutPromise]);
+        statsInfo = updateStatsInfo(statsInfo);
+    } catch (error) {
+        console.error("Failed to fetch stats info:", error);
+    }
+
+    buildStatsContent(statsInfo)
+};
+
+renderStatsContent()

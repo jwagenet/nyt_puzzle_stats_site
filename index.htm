@@ -1,77 +1,63 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <title>NYTimes Mini Stats</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="version" content="v2411191415">
-  <meta name="CG" content="Crosswords/Games" data-testid="meta-cg">
-  <meta name="PT" content="statistics" data-testid="meta-pt">
-  <link rel="manifest" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-web-manifest.json?v=v2411191415">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-apple-touch-icon.png?v=v2411191415">
-  <link rel="mask-icon" color="#000000" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-safari-pinned-tab.svg?v=v2411191415">
-  <link rel="shortcut icon" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-favicon.ico?v=v2411191415">
-  <meta name="apple-mobile-web-app-title" content="NYT Games" data-testid="meta">
-  <meta name="application-name" content="NYT Games" data-testid="meta">
-  <meta name="msapplication-TileColor" content="#000000" data-testid="meta">
-  <meta name="theme-color" content="#000000" data-testid="meta">
-  <meta name="sourceApp" content="games-crosswords" data-testid="meta">
+    <title>NYTimes Mini Stats</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="version" content="v2411191415">
+    <meta name="CG" content="Crosswords/Games" data-testid="meta-cg">
+    <meta name="PT" content="statistics" data-testid="meta-pt">
+    <link rel="manifest" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-web-manifest.json?v=v2411191415">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-apple-touch-icon.png?v=v2411191415">
+    <link rel="mask-icon" color="#000000" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-safari-pinned-tab.svg?v=v2411191415">
+    <link rel="shortcut icon" href="https://www.nytimes.com/games-assets/v2/metadata/nyt-favicon.ico?v=v2411191415">
+    <meta name="apple-mobile-web-app-title" content="NYT Games" data-testid="meta">
+    <meta name="application-name" content="NYT Games" data-testid="meta">
+    <meta name="msapplication-TileColor" content="#000000" data-testid="meta">
+    <meta name="theme-color" content="#000000" data-testid="meta">
+    <meta name="sourceApp" content="games-crosswords" data-testid="meta">
 
-  <link rel="stylesheet" type="text/css" href="./boilerplate.css">
-  <link rel="stylesheet" type="text/css" href="./stats.css">
-
+    <link rel="stylesheet" type="text/css" href="./boilerplate.css">
+    <link rel="stylesheet" type="text/css" href="./stats.css">
 </head>
+
 <body>
- <div id="stats-root" data-testid="stats-root">
-    <div>
-       <div class="stats-content">
-          <section id="stats-overview">
-             <h1 class="stats-header">Your Statistics</h1>
-             <div class="container cf">
+    <div id="stats-root" data-testid="stats-root">
+        <div class="stats-content">
+            <section id="stats-overview">
+                <h1 class="stats-header">Your Statistics</h1>
+                <div class="container cf">
                 <div class="single-stat">
-                   <h2>207</h2>
-                   <p>Puzzles Solved</p>
+                    <h2>207</h2>
+                    <p>Puzzles Solved</p>
                 </div>
                 <div class="single-stat">
-                   <h2>40.4%</h2>
-                   <p>Solve Rate</p>
+                    <h2>40.4%</h2>
+                    <p>Solve Rate</p>
                 </div>
                 <div class="single-stat">
-                   <div class="icon-stats-streak"></div>
-                   <h2>0</h2>
-                   <p>Current Streak</p>
+                    <div class="icon-stats-streak"></div>
+                    <h2>0</h2>
+                    <p>Current Streak</p>
                 </div>
                 <div class="single-stat">
-                   <div class="icon-stats-streak"></div>
-                   <h2>4</h2>
-                   <p>Longest Streak</p>
+                    <div class="icon-stats-streak"></div>
+                    <h2>4</h2>
+                    <p>Longest Streak</p>
                 </div>
-             </div>
-          </section>
-          <section id="weekly-stats">
-             <div class="header">
-                <h1 class="stats-subheader">Daily Solve Times</h1>
-             </div>
-             <div class="container clearfix">
-                <div class="single-day active" data-testid="single-day-monday"> <p class="day-of-week"><span class="day-first">M</span><span class="day-tail">onday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 78px; left: 120px;">06-05-2023</p> <div class="time-bar best" style="height: 70px; width: 80px;"> <p class="time">5:18</p> <p>Best</p> </div> <div class="time-bar average" style="height: 97.0823px; width: 111.706px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">5:18</span></p> <p>A <span class="time">14:03</span></p> </div> <div class="expanded"> <p class="time">14:03</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-tuesday"> <p class="day-of-week"><span class="day-first">T</span><span class="day-tail">uesday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>Today</p> </div> <p class="best-date" style="bottom: 86.7695px; left: 130.267px;">02-27-2024</p> <div class="time-bar best" style="height: 78.7695px; width: 90.2667px;"> <p class="time">8:08</p> <p>Best</p> </div> <div class="time-bar average" style="height: 120.966px; width: 139.668px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">8:08</span></p> <p>A <span class="time">21:46</span></p> </div> <div class="expanded"> <p class="time">21:46</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-wednesday"> <p class="day-of-week"><span class="day-first">W</span><span class="day-tail">ednesday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 100.698px; left: 146.573px;">07-12-2023</p> <div class="time-bar best" style="height: 92.6975px; width: 106.573px;"> <p class="time">12:38</p> <p>Best</p> </div> <div class="time-bar average" style="height: 139.124px; width: 160.926px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">12:38</span></p> <p>A <span class="time">27:38</span></p> </div> <div class="expanded"> <p class="time">27:38</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-thursday"> <p class="day-of-week"><span class="day-first">T</span><span class="day-tail">hursday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 143.668px; left: 196.88px;">09-12-2024</p> <div class="time-bar best" style="height: 135.668px; width: 156.88px;"> <p class="time">26:31</p> <p>Best</p> </div> <div class="time-bar average" style="height: 173.893px; width: 201.631px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">26:31</span></p> <p>A <span class="time">38:52</span></p> </div> <div class="expanded"> <p class="time">38:52</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-friday"> <p class="day-of-week"><span class="day-first">F</span><span class="day-tail">riday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 143.565px; left: 196.759px;">10-13-2023</p> <div class="time-bar best" style="height: 135.565px; width: 156.759px;"> <p class="time">26:29</p> <p>Best</p> </div> <div class="time-bar average" style="height: 171.468px; width: 198.792px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">26:29</span></p> <p>A <span class="time">38:05</span></p> </div> <div class="expanded"> <p class="time">38:05</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-saturday"> <p class="day-of-week"><span class="day-first">S</span><span class="day-tail">aturday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 188.96px; left: 249.904px;">01-13-2024</p> <div class="time-bar best" style="height: 180.96px; width: 209.904px;"> <p class="time">41:09</p> <p>Best</p> </div> <div class="time-bar average" style="height: 180.96px; width: 209.904px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">41:09</span></p> <p>A <span class="time">41:09</span></p> </div> <div class="expanded"> <p class="time">41:09</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-sunday"> <p class="day-of-week"><span class="day-first">S</span><span class="day-tail">unday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 244.672px; left: 315.128px;">09-01-2024</p> <div class="time-bar best" style="height: 236.672px; width: 275.128px;"> <p class="time">59:09</p> <p>Best</p> </div> <div class="time-bar average" style="height: 275px; width: 320px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">59:09</span></p> <p>A <span class="time">1:11:32</span></p> </div> <div class="expanded"> <p class="time">1:11:32</p> <p>Average</p> </div> </div> </div>
-             </div>
-          </section>
-       </div>
+                </div>
+            </section>
+            <section id="weekly-stats">
+                <div class="header">
+                    <h1 class="stats-subheader">Daily Solve Times</h1>
+                </div>
+                <div class="container clearfix">
+                    <div class="single-day active" data-testid="single-day-monday"> <p class="day-of-week"><span class="day-first">M</span><span class="day-tail">onday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 78px; left: 120px;">06-05-2023</p> <div class="time-bar best" style="height: 70px; width: 80px;"> <p class="time">5:18</p> <p>Best</p> </div> <div class="time-bar average" style="height: 97.0823px; width: 111.706px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">5:18</span></p> <p>A <span class="time">14:03</span></p> </div> <div class="expanded"> <p class="time">14:03</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-tuesday"> <p class="day-of-week"><span class="day-first">T</span><span class="day-tail">uesday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>Today</p> </div> <p class="best-date" style="bottom: 86.7695px; left: 130.267px;">02-27-2024</p> <div class="time-bar best" style="height: 78.7695px; width: 90.2667px;"> <p class="time">8:08</p> <p>Best</p> </div> <div class="time-bar average" style="height: 120.966px; width: 139.668px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">8:08</span></p> <p>A <span class="time">21:46</span></p> </div> <div class="expanded"> <p class="time">21:46</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-wednesday"> <p class="day-of-week"><span class="day-first">W</span><span class="day-tail">ednesday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 100.698px; left: 146.573px;">07-12-2023</p> <div class="time-bar best" style="height: 92.6975px; width: 106.573px;"> <p class="time">12:38</p> <p>Best</p> </div> <div class="time-bar average" style="height: 139.124px; width: 160.926px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">12:38</span></p> <p>A <span class="time">27:38</span></p> </div> <div class="expanded"> <p class="time">27:38</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-thursday"> <p class="day-of-week"><span class="day-first">T</span><span class="day-tail">hursday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 143.668px; left: 196.88px;">09-12-2024</p> <div class="time-bar best" style="height: 135.668px; width: 156.88px;"> <p class="time">26:31</p> <p>Best</p> </div> <div class="time-bar average" style="height: 173.893px; width: 201.631px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">26:31</span></p> <p>A <span class="time">38:52</span></p> </div> <div class="expanded"> <p class="time">38:52</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-friday"> <p class="day-of-week"><span class="day-first">F</span><span class="day-tail">riday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 143.565px; left: 196.759px;">10-13-2023</p> <div class="time-bar best" style="height: 135.565px; width: 156.759px;"> <p class="time">26:29</p> <p>Best</p> </div> <div class="time-bar average" style="height: 171.468px; width: 198.792px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">26:29</span></p> <p>A <span class="time">38:05</span></p> </div> <div class="expanded"> <p class="time">38:05</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-saturday"> <p class="day-of-week"><span class="day-first">S</span><span class="day-tail">aturday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 188.96px; left: 249.904px;">01-13-2024</p> <div class="time-bar best" style="height: 180.96px; width: 209.904px;"> <p class="time">41:09</p> <p>Best</p> </div> <div class="time-bar average" style="height: 180.96px; width: 209.904px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">41:09</span></p> <p>A <span class="time">41:09</span></p> </div> <div class="expanded"> <p class="time">41:09</p> <p>Average</p> </div> </div> </div> <div class="single-day" data-testid="single-day-sunday"> <p class="day-of-week"><span class="day-first">S</span><span class="day-tail">unday</span></p> <div class="time-bar today" style="height: 53.5959px; width: 60.7952px;"> <p class="time">--:--</p> <p>This Week</p> </div> <p class="best-date" style="bottom: 244.672px; left: 315.128px;">09-01-2024</p> <div class="time-bar best" style="height: 236.672px; width: 275.128px;"> <p class="time">59:09</p> <p>Best</p> </div> <div class="time-bar average" style="height: 275px; width: 320px;"> <div class="condensed"> <p>T <span class="time">--:--</span></p> <p>B <span class="time">59:09</span></p> <p>A <span class="time">1:11:32</span></p> </div> <div class="expanded"> <p class="time">1:11:32</p> <p>Average</p> </div> </div> </div>
+                </div>
+            </section>
+        </div>
     </div>
-    <!-- <script> -->
-    <!-- document.querySelectorAll(".single-day").forEach((e => { -->
-        <!-- e.addEventListener("click", (() => { -->
-            <!-- (e => { -->
-                <!-- let t = (document.querySelectorAll(".active.single-day") || [])[0]; -->
-                <!-- t && t.classList.remove("active"), t = e, t.classList.add("active") -->
-            <!-- })(e) -->
-        <!-- })) -->
-    <!-- })) -->
-    
-    <!-- document.querySelectorAll(".single-day") -->
-    <!-- </script> -->
     <script type="text/javascript" src="./stats.js"></script>
-    
 </body>
 </html>

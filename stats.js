@@ -5,11 +5,13 @@ const timeHoursMinutes = timeSeconds => {
         minutesPad = minutes < 10 ? "0".concat(minutes) : minutes,
         seconds = Math.floor(timeSeconds % 60),
         secondsPad = seconds < 10 ? "0".concat(seconds) : seconds;
+
     return hours > 0 ? [hours, minutesPad, secondsPad].join(":") : "".concat(minutes, ":").concat(secondsPad)
 },
 
-setBarHeight = (currentTime, fastestTime, slowestTime) => {
+setBarSize = (currentTime, fastestTime, slowestTime) => {
     const scaleFactor = (currentTime - fastestTime) / (slowestTime - fastestTime);
+
     return {
         height: 70 + 205 * scaleFactor,
         width: 80 + 240 * scaleFactor
@@ -52,23 +54,42 @@ var buildStatsSummary = statsInfo => {
         currentStreak,
         longestStreak
     } = statsInfo;
-    return a.createElement("section", {id: "stats-overview"},
-        a.createElement("h1", {className: "stats-header"}, "Your Statistics"),
-        a.createElement("div", {className: "container cf"},
-            a.createElement("div", {className: "single-stat"},
-                a.createElement("h2", null, puzzlesSolved),
-                a.createElement("p", null, "Puzzles Solved")),
-            a.createElement("div", {className: "single-stat"},
-                a.createElement("h2", null, solveRate),
-                a.createElement("p", null, "Solve Rate")),
-            a.createElement("div", {className: "single-stat"},
-                a.createElement("div", {className: "icon-stats-streak"}),
-                a.createElement("h2", null, currentStreak),
-                a.createElement("p", null, "Current Streak")),
-            a.createElement("div", {className: "single-stat"},
-                a.createElement("div", {className: "icon-stats-streak"}),
-                a.createElement("h2", null, longestStreak),
-                a.createElement("p", null, "Longest Streak"))))
+
+    const section = document.createElement("section");
+        section.id = "stats-overview";
+    const header = document.createElement("h1");
+        header.className = "stats-header";
+        header.textContent = "Your Statistics";
+    const container = document.createElement("div");
+        container.className = "container cf";
+
+    function createStatBlock(headerText, value, icon = false) {
+        const statBlock = document.createElement("div");
+            statBlock.className = `single-stat`;
+        if (icon) {
+            const iconDiv = document.createElement("div");
+                iconDiv.className = "icon-stats-streak";
+            statBlock.appendChild(iconDiv);
+        };
+        const statValue = document.createElement("h2");
+            statValue.textContent = value;
+        const statLabel = document.createElement("p");
+            statLabel.textContent = headerText;
+
+        statBlock.appendChild(statValue);
+        statBlock.appendChild(statLabel);
+
+        return statBlock;
+    }
+
+    container.appendChild(createStatBlock("Puzzles Solved", puzzlesSolved));
+    container.appendChild(createStatBlock("Solve Rate", solveRate));
+    container.appendChild(createStatBlock("Current Streak", currentStreak, true));
+    container.appendChild(createStatBlock("Longest Streak", longestStreak, true));
+
+    section.append(header, container);
+
+    return section;
 };
 
 var buildStatsDay = dayInfo => {
@@ -82,89 +103,144 @@ var buildStatsDay = dayInfo => {
         fastestTime,
         slowestTime
     } = dayInfo,
-    latestTimeHeight = setBarHeight(latestTime, fastestTime, slowestTime),
-    bestTimeHeight = setBarHeight(bestTime, fastestTime, slowestTime),
-    averageTimeHeight = setBarHeight(averageTime, fastestTime, slowestTime),
+
+    latestTimeHeight = setBarSize(latestTime, fastestTime, slowestTime),
+    bestTimeHeight = setBarSize(bestTime, fastestTime, slowestTime),
+    averageTimeHeight = setBarSize(averageTime, fastestTime, slowestTime),
     isTodayString = isToday ? "Today" : "This Week",
     bestDateBottom = bestTimeHeight.height + 8,
     bestDateLeft = bestTimeHeight.width + 40,
     latestTimeString = 0 !== latestTime ? timeHoursMinutes(latestTime) : "--:--",
     bestTimeString = timeHoursMinutes(bestTime),
     averageTimeString = timeHoursMinutes(averageTime);
-    return a.createElement("div", {className: y()("single-day", {active: isToday})},
-        a.createElement("p", {className: "day-of-week"},
-            a.createElement("span", {className: "day-first"}, label.substring(0, 1)),
-            a.createElement("span", {className: "day-tail"}, label.substring(1))),
-        0 === averageTime ? a.createElement(a.Fragment, null,
-            a.createElement("div", {className: "time-bar today no-stats"}),
-            a.createElement("div", {className: "time-bar best no-stats"}),
-            a.createElement("div", {className: "time-bar average no-stats"})
-        ) : a.createElement(a.Fragment, null,
-            a.createElement("div", {className: "time-bar today",
-                style: {
-                    height: latestTimeHeight.height,
-                    width: latestTimeHeight.width}},
-            a.createElement("p", {className: "time"}, latestTimeString),
-            a.createElement("p", null, isTodayString)),
-            a.createElement("p", {className: "best-date",
-                style: {
-                    bottom: bestDateBottom,
-                    left: bestDateLeft}}, bestDate),
-            a.createElement("div", {className: "time-bar best",
-                style: {
-                    height: bestTimeHeight.height,
-                    width: bestTimeHeight.width}},
-            a.createElement("p", {className: "time"}, bestTimeString),
-            a.createElement("p", null, "Best")),
-            a.createElement("div", {className: "time-bar average",
-                style: {
-                    height: averageTimeHeight.height,
-                    width: averageTimeHeight.width}},
-            a.createElement("div", {className: "condensed"},
-                a.createElement("p", null, "T ", a.createElement("span", {className: "time"}, latestTimeString)),
-                a.createElement("p", null, "B ", a.createElement("span", {className: "time"}, bestTimeString)),
-                a.createElement("p", null, "A ", a.createElement("span", {className: "time"}, averageTimeString))),
-            a.createElement("div", {className: "expanded"},
-            a.createElement("p", {className: "time"}, averageTimeString),
-            a.createElement("p", null, "Average")))))
+
+    const singleDay = document.createElement("div");
+        singleDay.className = `single-day${isToday ? " active" : ""}`;
+    const dayOfWeek = document.createElement("p");
+        dayOfWeek.className = "day-of-week";
+    const dayFirst = document.createElement("span");
+        dayFirst.className = "day-first";
+        dayFirst.textContent = label.substring(0, 1);
+    const dayTail = document.createElement("span");
+        dayTail.className = "day-tail";
+        dayTail.textContent = label.substring(1);
+
+    dayOfWeek.append(dayFirst, dayTail);
+    singleDay.append(dayOfWeek);
+
+    if (averageTime === 0) {
+        ["time-bar today no-stats", "time-bar best no-stats", "time-bar average no-stats"].forEach(className => {
+            const bar = document.createElement("div");
+            bar.className = className;
+            singleDay.append(bar);
+        });
+    } else {
+        const latestBar = document.createElement("div");
+            latestBar.className = "time-bar today";
+            latestBar.style.height = latestTimeHeight.height + "px";
+            latestBar.style.width = latestTimeHeight.width + "px";
+        const latestTime = document.createElement("p");
+            latestTime.className = "time";
+            latestTime.textContent = latestTimeString;
+        const latestText = document.createElement("p");
+            latestText.textContent = isTodayString;
+
+        latestBar.append(latestTime, latestText);
+
+        const bestDateElem = document.createElement("p");
+            bestDateElem.className = "best-date";
+            bestDateElem.style.bottom = bestDateBottom + "px";
+            bestDateElem.style.left = bestDateLeft + "px";
+            bestDateElem.textContent = bestDate;
+        const bestBar = document.createElement("div");
+            bestBar.className = "time-bar best";
+            bestBar.style.height = bestTimeHeight.height + "px";
+            bestBar.style.width = bestTimeHeight.width + "px";
+        const bestTime = document.createElement("p");
+            bestTime.className = "time";
+            bestTime.textContent = bestTimeString;
+        const bestText = document.createElement("p");
+            bestText.textContent = "Best";
+
+        bestBar.append(bestTime, bestText);
+
+        const averageBar = document.createElement("div");
+            averageBar.className = "time-bar average";
+            averageBar.style.height = averageTimeHeight.height + "px";
+            averageBar.style.width = averageTimeHeight.width + "px";
+
+            const condensed = document.createElement("div");
+                condensed.className = "condensed";
+            const latestCondensed = document.createElement("p");
+                latestCondensed.innerHTML = `T <span class="time">${latestTimeString}</span>`;
+            const bestCondensed = document.createElement("p");
+                bestCondensed.innerHTML = `B <span class="time">${bestTimeString}</span>`;
+            const averageCondensed = document.createElement("p");
+                averageCondensed.innerHTML = `A <span class="time">${averageTimeString}</span>`;
+            condensed.append(latestCondensed, bestCondensed, averageCondensed);
+
+            const expanded = document.createElement("div");
+                expanded.className = "expanded";
+            const averageTimeElem = document.createElement("p");
+                averageTimeElem.className = "time";
+                averageTimeElem.textContent = averageTimeString;
+            const averageText = document.createElement("p");
+                averageText.textContent = "Average";
+            expanded.append(averageTimeElem, averageText);
+
+        averageBar.append(condensed, expanded);
+
+        singleDay.append(latestBar, bestDateElem, bestBar, averageBar);
+    }
+
+    return singleDay
 };
 
 var buildStatsDaily = statsInfo => {
-    (0, a.useEffect)((() => {
-        document.querySelectorAll(".single-day").forEach((element => {
-            element.addEventListener("click", (() => {
-                (element => {
-                    let elementActive = (document.querySelectorAll(".active.single-day") || [])[0];
-                    elementActive && elementActive.classList.remove("active"),
-                    elementActive = element,
-                    elementActive.classList.add("active")
-                })(element)
-            }))
-        }))
-    }), []);
-
     const {
         byDay,
         fastestTime,
         slowestTime
     } = statsInfo;
 
-    return a.createElement("section", {id: "weekly-stats"},
-                a.createElement("div", {className: "header"},
-                a.createElement("h1", {className: "stats-subheader"}, "Daily Solve Times")),
-                a.createElement("div", {className: "container clearfix"},
-                byDay.map((e => a.createElement(buildStatsDay, {
-                        key: e.label,
-                        label: e.label,
-                        fastestTime: fastestTime,
-                        slowestTime: slowestTime,
-                        bestDate: e.bestDate,
-                        bestTime: e.bestTime,
-                        latestTime: e.latestTime,
-                        averageTime: e.averageTime,
-                        isToday: e.isToday
-                    })))))
+    const section = document.createElement("section");
+        section.id = "weekly-stats";
+    const header = document.createElement("h1");
+        header.className = "stats-subheader";
+        header.textContent = "Daily Solve Times";
+    const container = document.createElement("div");
+        container.className = "container clearfix";
+
+    dayElements = byDay.map(dayInfo => buildStatsDay({
+        key: dayInfo.label,
+        label: dayInfo.label,
+        fastestTime: fastestTime,
+        slowestTime: slowestTime,
+        bestDate: dayInfo.bestDate,
+        bestTime: dayInfo.bestTime,
+        latestTime: dayInfo.latestTime,
+        averageTime: dayInfo.averageTime,
+        isToday: dayInfo.isToday
+    }));
+
+    dayElements.forEach(dayElement => container.appendChild(dayElement));
+    section.append(header, container)
+
+    return section
 };
+
+const applyEvent = () => {
+    document.querySelectorAll(".single-day").forEach(element => {
+        element.addEventListener("click", (() => {
+            (element => {
+                let elementActive = (document.querySelectorAll(".active.single-day") || [])[0];
+                elementActive && elementActive.classList.remove("active"),
+                elementActive = element,
+                elementActive.classList.add("active")
+            })(element)
+        }))
+    })
+}
 
 const dummyStats = updateStatsInfo({
     stats: {
@@ -246,25 +322,35 @@ const dummyStats = updateStatsInfo({
 });
 
 // execute stats display
-function updateStatsContent(statsInfo) {
-    a.createElement("div", null,
-        a.createElement("div", {className: "stats-content"},
-            statsInfo && a.createElement(buildStatsSummary, statsInfo),
-            statsInfo && a.createElement(buildStatsDaily, statsInfo)))
-    };
-    const statsRootElement = document.getElementById("stats-root");
-    // (0, r.s)(statsRootElement).render(a.createElement(a.Fragment, null, a.createElement(G, null)), statsRootElement)
-
-
-const updateStatsDisplays = async function() {
+const fetchStatsInfo = async function() {
     let statsAndStreaks = await fetch("./stats-and-streaks.json")
         .then(response => response.json())
         .then(json => json.results);
 
-    console.log(statsAndStreaks)
-    console.log(g(statsAndStreaks))
+    statsInfo = updateStatsInfo(statsAndStreaks)
 
+    return statsInfo
+    console.log(statsInfo)
 
-    };
+    const statsRootElement = document.getElementById("stats-root");
+    console.log(buildStatsSummary(statsInfo))
+    console.log(buildStatsDaily(statsInfo))
+};
 
-    updateStatsDisplays()
+function updateStatsContent() {
+    const statsInfo = dummyStats
+
+    const statsRoot = document.getElementById("stats-root");
+    while (statsRoot.lastElementChild) {
+        statsRoot.removeChild(statsRoot.lastElementChild);
+    }
+
+    const content = document.createElement("div");
+        content.className = "stats-content";
+    content.append(buildStatsSummary(statsInfo), buildStatsDaily(statsInfo));
+    statsRoot.appendChild(content);
+
+    applyEvent()
+};
+
+updateStatsContent()

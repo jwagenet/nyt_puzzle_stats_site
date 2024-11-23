@@ -330,6 +330,15 @@ async function fetchStatsInfo() {
     return statsAndStreaks
 };
 
+async function fetchPuzzleHistory() {
+    let statsAndStreaks = await fetch("./data.json")
+        .then(response => response.json());
+
+    console.log(statsAndStreaks)
+
+    return statsAndStreaks
+};
+
 function buildStatsContent(statsInfo) {
     const statsRoot = document.getElementById("stats-root");
     while (statsRoot.lastElementChild) {
@@ -359,4 +368,81 @@ async function renderStatsContent() {
     buildStatsContent(statsInfo)
 };
 
+// process scraped data
+function getMostRecentMonday() {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const daysSinceMonday = (dayOfWeek + 6) % 7
+    const mostRecentMonday = new Date(today);
+    mostRecentMonday.setDate(today.getDate() - daysSinceMonday);
+    return mostRecentMonday;
+};
+
+function isDateThisWeek(monday, dateToCheck) {
+    const providedDate = new Date(dateToCheck);
+
+    monday.setHours(0, 0, 0, 0);
+    providedDate.setHours(0, 0, 0, 0);
+
+    return providedDate >= monday;
+};
+
+async function getStatsFromHistory() {
+    const puzzleHistory = await fetchPuzzleHistory()
+    const mostRecentMonday = getMostRecentMonday()
+    let groupedDays = []
+    let statsByDay = []
+
+    puzzleHistory.forEach(puzzle => {
+        if (!groupedDays[puzzle.day_of_week_integer]) {
+            groupedDays[puzzle.day_of_week_integer] = [];
+        }
+        groupedDays[puzzle.day_of_week_integer].push(puzzle);
+    });
+
+    groupedDays.forEach((day, i) => {
+        const puzzlesAttempted = day.map(day => day.percent_filled > 0 ? 1 : 0)
+            .reduce((sum, number) => sum + number, 0);
+
+        const puzzlesSolved = day.map(day => day.solved ? 1 : 0)
+        const puzzleTimes = day.map(day => day.solving_seconds)
+                                .filter((_, index) => puzzlesSolved[index]);
+        const puzzleDatesText = day.map(day => day.print_date)
+                                .filter((_, index) => puzzlesSolved[index]);
+
+        const puzzleDates = puzzleDatesText.map(date => new Date(date).getTime());
+        const bestTime = Math.min(...puzzleTimes);
+        const latestDateIndex = puzzleDates.indexOf(Math.max(...puzzleDates));
+        const latestDate = puzzleDatesText[latestDateIndex];
+        const latestTime = puzzleTimes[latestDateIndex];
+
+        statsByDay.push({
+            puzzles_attempted : puzzlesAttempted,
+            avg_denominator: puzzleTimes.length,
+            avg_time: Math.ceil(puzzleTimes.reduce((sum, num) => sum + num, 0) / puzzleTimes.length),
+            best_date: puzzleDatesText[puzzleTimes.indexOf(bestTime)],
+            best_time: bestTime,
+            label: day[0].day_of_week_name,
+            latest_date: latestDate,
+            latest_time: latestTime,
+            this_weeks_time: isDateThisWeek(mostRecentMonday, latestDate) ? latestTime : 0
+        })
+    });
+
+    const puzzlesSolved = statsByDay.map(statsByDay => statsByDay.avg_denominator)
+        .reduce((sum, number) => sum + number, 0);
+    const puzzlesAttempted = statsByDay.map(statsByDay => statsByDay.puzzles_attempted)
+    .reduce((sum, number) => sum + number, 0);
+
+    return {
+        longest_avg_time: Math.max(...statsByDay.map(statsByDay => statsByDay.avg_time)),
+        longest_latest_time: Math.max(...statsByDay.map(statsByDay => statsByDay.latest_time)),
+        puzzles_attempted: puzzlesAttempted,
+        puzzles_solved: puzzlesSolved,
+        solve_rate: Math.round(puzzlesSolved / puzzlesAttempted  * 1000) / 1000,
+        stats_by_day: statsByDay
+    }
+};
+
+console.log(getStatsFromHistory())
 renderStatsContent()

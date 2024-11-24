@@ -394,10 +394,13 @@ async function getStatsFromHistory() {
     let statsByDay = []
 
     puzzleHistory.forEach(puzzle => {
-        if (!groupedDays[puzzle.day_of_week_integer]) {
-            groupedDays[puzzle.day_of_week_integer] = [];
+        let dayOFWeekInteger = groupedDays[puzzle.day_of_week_integer]
+        dayOFWeekInteger = dayOFWeekInteger > 0 ? dayOFWeekInteger - 1 : 6
+
+        if (!dayOFWeekInteger) {
+            dayOFWeekInteger = [];
         }
-        groupedDays[puzzle.day_of_week_integer].push(puzzle);
+        dayOFWeekInteger.push(puzzle);
     });
 
     groupedDays.forEach((day, i) => {

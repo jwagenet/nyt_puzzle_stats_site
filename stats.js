@@ -322,7 +322,7 @@ const dummyStats = updateStatsInfo({
 });
 
 // execute stats display
-async function fetchStatsInfo() {
+async function fetchStatsAndStreaks() {
     let statsAndStreaks = await fetch("./stats-and-streaks.json")
         .then(response => response.json())
         .then(json => json.results);
@@ -333,8 +333,6 @@ async function fetchStatsInfo() {
 async function fetchPuzzleHistory() {
     let statsAndStreaks = await fetch("./data.json")
         .then(response => response.json());
-
-    console.log(statsAndStreaks)
 
     return statsAndStreaks
 };
@@ -353,13 +351,14 @@ function buildStatsContent(statsInfo) {
     applyEvent()
 };
 
-async function renderStatsContent() {
+async function renderStatsContent(puzzleType = "mini") {
     const timeout = 5000;
     let statsInfo = dummyStats;
+    let getPuzzleStats = puzzleType == "mini" ? getStatsAndStreaksFromHistory : fetchStatsAndStreaks
 
     try {
         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), timeout))
-        statsInfo = await Promise.race([fetchStatsInfo(), timeoutPromise]);
+        statsInfo = await Promise.race([getPuzzleStats(), timeoutPromise]);
         statsInfo = updateStatsInfo(statsInfo);
     } catch (error) {
         console.error("Failed to fetch stats info:", error);
@@ -387,7 +386,7 @@ function isDateThisWeek(monday, dateToCheck) {
     return providedDate >= monday;
 };
 
-async function getStatsAndStreaks() {
+async function getStatsAndStreaksFromHistory() {
     const puzzleHistory = await fetchPuzzleHistory()
 
     return {
@@ -462,5 +461,4 @@ function getStreaksFromHistory(puzzleHistory) {
     }
 };
 
-console.log(getStatsAndStreaks())
 renderStatsContent()

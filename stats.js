@@ -387,20 +387,28 @@ function isDateThisWeek(monday, dateToCheck) {
     return providedDate >= monday;
 };
 
-async function getStatsFromHistory() {
+async function getStatsAndStreaks() {
     const puzzleHistory = await fetchPuzzleHistory()
+
+    return {
+        stats: getStatsFromHistory(puzzleHistory),
+        streaks: getStreaksFromHistory(puzzleHistory)
+    }
+};
+
+function getStatsFromHistory(puzzleHistory) {
     const mostRecentMonday = getMostRecentMonday()
     let groupedDays = []
     let statsByDay = []
 
     puzzleHistory.forEach(puzzle => {
-        let dayOFWeekInteger = groupedDays[puzzle.day_of_week_integer]
-        dayOFWeekInteger = dayOFWeekInteger > 0 ? dayOFWeekInteger - 1 : 6
+        let dayOfWeekInteger = puzzle.day_of_week_integer
+        dayOfWeekInteger = dayOfWeekInteger > 0 ? dayOfWeekInteger - 1 : 6
 
-        if (!dayOFWeekInteger) {
-            dayOFWeekInteger = [];
+        if (!groupedDays[dayOfWeekInteger]) {
+            groupedDays[dayOfWeekInteger] = [];
         }
-        dayOFWeekInteger.push(puzzle);
+        groupedDays[dayOfWeekInteger].push(puzzle);
     });
 
     groupedDays.forEach((day, i) => {
@@ -447,5 +455,12 @@ async function getStatsFromHistory() {
     }
 };
 
-console.log(getStatsFromHistory())
+function getStreaksFromHistory(puzzleHistory) {
+    return {
+        current_streak: 0,
+        longest_streak: 0
+    }
+};
+
+console.log(getStatsAndStreaks())
 renderStatsContent()

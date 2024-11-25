@@ -25,7 +25,7 @@ const updateStatsInfo = statsAndStreaks => {
         streaks
     } = statsAndStreaks;
 
-    const todayWeekday = "Wednesday"; //f()().format("dddd"),
+    const todayWeekday = new Date().toLocaleString('en-US', {weekday: 'long'});
     const timesBest = stats.stats_by_day.map((statsAndStreaks => statsAndStreaks.best_time));
 
     return {
@@ -41,7 +41,9 @@ const updateStatsInfo = statsAndStreaks => {
             isToday: statsAndStreaks.label === todayWeekday,
             averageTime: statsAndStreaks.avg_time,
             bestTime: statsAndStreaks.best_time,
-            bestDate: "2017-05-22", //f()(statsAndStreaks.best_date).format("MM-DD-YYYY"),
+            bestDate: new Date(statsAndStreaks.best_date).toLocaleString('en-US',
+                {month: 'numeric', day: 'numeric', year: 'numeric'})
+                .replaceAll("/", "-"),
             latestTime: statsAndStreaks.this_weeks_time
         })))
     }

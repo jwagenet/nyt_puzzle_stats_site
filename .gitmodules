@@ -1,0 +1,3 @@
+[submodule "nyt_crossword_stats"]
+	path = nyt_crossword_stats
+	url = https://github.com/jwagenet/nyt-crossword-stats.git

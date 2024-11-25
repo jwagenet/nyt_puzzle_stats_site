@@ -131,13 +131,16 @@
 }
 
 .stats-header {
-	font: 35px/34px "NYT-KarnakCondensed";
+	font: 35px/34px "Noto Serif";
+    font-weight: 900;
+    font-variation-settings:
+        "wdth" 75;
 	text-align: center;
 	margin-bottom: 30px
 }
 
 .stats-subheader {
-	font: 700 14px "NYT-Franklin";
+	font: 700 14px "Noto Sans";
 	letter-spacing: .5px;
 	text-transform: uppercase;
 	text-align: center;
@@ -354,7 +357,7 @@
 }
 
 #weekly-stats .single-day .time {
-	font-family: nyt-franklin, Helvetica, Arial, sans-serif
+	font-family: "Noto Sans", Helvetica, Arial, sans-serif
 }
 
 #weekly-stats .single-day .no-stats {

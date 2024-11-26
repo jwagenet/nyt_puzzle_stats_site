@@ -208,7 +208,7 @@ var buildStatsDaily = statsInfo => {
     const section = document.createElement("section");
         section.id = "weekly-stats";
     const header = document.createElement("h1");
-        header.className = "stats-subheader";
+        header.className = "header stats-subheader";
         header.textContent = "Daily Solve Times";
     const container = document.createElement("div");
         container.className = "container clearfix";

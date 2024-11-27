@@ -333,7 +333,7 @@ async function fetchStatsAndStreaks() {
 };
 
 async function fetchPuzzleHistory() {
-    let statsAndStreaks = await fetch("./data.json")
+    let statsAndStreaks = await fetch("./mini-history.json")
         .then(response => response.json());
 
     return statsAndStreaks
@@ -372,18 +372,18 @@ async function renderStatsContent(puzzleType = "mini") {
 // process scraped data
 function getMostRecentMonday() {
     const today = new Date();
-    const dayOfWeek = today.getDay();
+    const dayOfWeek = today.getUTCDay();
     const daysSinceMonday = (dayOfWeek + 6) % 7
     const mostRecentMonday = new Date(today);
-    mostRecentMonday.setDate(today.getDate() - daysSinceMonday);
+    mostRecentMonday.setUTCDate(today.getUTCDate() - daysSinceMonday);
+    mostRecentMonday.setUTCHours(0, 0, 0, 0);
+
     return mostRecentMonday;
 };
 
 function isDateThisWeek(monday, dateToCheck) {
     const providedDate = new Date(dateToCheck);
-
-    monday.setHours(0, 0, 0, 0);
-    providedDate.setHours(0, 0, 0, 0);
+    providedDate.setUTCHours(0, 0, 0, 0);
 
     return providedDate >= monday;
 };

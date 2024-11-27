@@ -9,14 +9,9 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 
 # remote
-from nyt_crossword_stats.fetch_puzzle_stats import DATE_FORMAT, get_puzzle_stats, get_v3_puzzle_detail, login
+from nyt_crossword_stats.fetch_puzzle_stats import DATE_FORMAT, login, batch_process_puzzle_overview, process_puzzle_detail
 
 load_dotenv()
-
-puzzle_type = "mini"
-start_date = "2024-04-01"
-end_date = "2024-11-24"
-update_old = False
 
 
 def get_date_str(date_object):
@@ -49,25 +44,12 @@ def get_cookie():
     return cookie
 
 
-def get_puzzle_details(puzzle):
-    if puzzle["solved"] == True:
-        detail = get_v3_puzzle_detail(puzzle_id=puzzle["puzzle_id"], cookie=cookie)
-        puzzle["solving_seconds"] = detail.get("secondsSpentSolving", None)
-    else:
-        puzzle["solving_seconds"] = None
-
-    puzzle["day_of_week_name"] = datetime.strptime(puzzle["print_date"], DATE_FORMAT).strftime("%A")
-    puzzle["day_of_week_integer"] = datetime.strptime(puzzle["print_date"], DATE_FORMAT).strftime("%w")
-
-    return puzzle
-
-
 def update_puzzle_details(puzzle_overview, updated_overview):
     count = 0
     for updated in tqdm(updated_overview):
         for puzzle in puzzle_overview:
             if puzzle["print_date"] == updated["print_date"] and puzzle["solved"] != updated["solved"]:
-                puzzle.update(get_puzzle_details(updated))
+                puzzle.update(process_puzzle_detail(updated))
                 count += 1
 
     if count:
@@ -110,9 +92,9 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
 
     if newest_puzzle < today:
         print("\nAdding new puzzles")
-        new_overview = get_puzzle_stats(puzzle_type, newest_puzzle + timedelta(days=1), today, cookie)
+        new_overview = batch_process_puzzle_overview(puzzle_type, newest_puzzle + timedelta(days=1), today, cookie)
         for puzzle in tqdm(new_overview):
-            puzzle = get_puzzle_details(puzzle)
+            puzzle = process_puzzle_detail(puzzle)
 
         puzzle_overview.extend(new_overview)
 
@@ -120,46 +102,46 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
         print("\nUpdating incomplete and not started puzzles")
         puzzle_overview = update_puzzle_details(
             puzzle_overview,
-            get_puzzle_stats(puzzle_type, update_start, update_end, cookie))
+            batch_process_puzzle_overview(puzzle_type, update_start, update_end, cookie))
 
     if update_old:
         if old_end and oldest_puzzle <= old_end:
             print("\nUpdating old puzzles")
             puzzle_overview = update_puzzle_details(
                 puzzle_overview,
-                get_puzzle_stats(puzzle_type, oldest_puzzle, old_end  - timedelta(days=1), cookie))
+                batch_process_puzzle_overview(puzzle_type, oldest_puzzle, old_end  - timedelta(days=1), cookie))
 
         if update_old and start_date < oldest_puzzle:
             print("\nAdding old puzzles")
-            old_overview = get_puzzle_stats(puzzle_type, start_date, oldest_puzzle - timedelta(days=1), cookie)
+            old_overview = batch_process_puzzle_overview(puzzle_type, start_date, oldest_puzzle - timedelta(days=1), cookie)
             for puzzle in tqdm(old_overview):
-                puzzle = get_puzzle_details(puzzle)
+                puzzle = process_puzzle_detail(puzzle)
 
             puzzle_overview[:0] = old_overview
 
     return puzzle_overview
 
 
-parser = argparse.ArgumentParser(description="Update NYT Crossword stats")
-parser.add_argument(
-    "-s", "--start-date", default=datetime.strftime(datetime.now() - timedelta(days=30), DATE_FORMAT),
-    help="The first date to pull from, inclusive (defaults to 30 days ago)",
-    )
-parser.add_argument(
-    "-e", "--end-date", default=datetime.strftime(datetime.now(), DATE_FORMAT),
-    help="The last date to pull from, inclusive (defaults to today)",
-    )
-parser.add_argument(
-    "-o", "--update_old",  action="store_true",
-    help="Flag to check for updates prior to oldest solve/incomplete",
-    )
-parser.add_argument(
-    "-t", "--type", default="daily",
-    help='The type of puzzle data to fetch. Valid values are "daily", "bonus", and "mini" (defaults to daily)',
-    )
-
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Update NYT Crossword stats")
+    parser.add_argument(
+        "-s", "--start-date", default=datetime.strftime(datetime.now() - timedelta(days=30), DATE_FORMAT),
+        help="The first date to pull from, inclusive (defaults to 30 days ago)",
+        )
+    parser.add_argument(
+        "-e", "--end-date", default=datetime.strftime(datetime.now(), DATE_FORMAT),
+        help="The last date to pull from, inclusive (defaults to today)",
+        )
+    parser.add_argument(
+        "-o", "--update_old",  action="store_true",
+        help="Flag to check for updates prior to oldest solve/incomplete",
+        )
+    parser.add_argument(
+        "-t", "--type", default="daily",
+        help='The type of puzzle data to fetch. Valid values are "daily", "bonus", and "mini" (defaults to daily)',
+        )
+
     args = parser.parse_args()
     puzzle_type = args.type
     start_date = args.start_date
@@ -177,9 +159,9 @@ if __name__ == "__main__":
 
     else:
         print(f"Fetching {puzzle_type} puzzle history for first time.")
-        puzzle_overview = get_puzzle_stats(puzzle_type, start_date, end_date, cookie)
+        puzzle_overview = batch_process_puzzle_overview(puzzle_type, start_date, end_date, cookie)
         for puzzle in tqdm(puzzle_overview):
-            puzzle = get_puzzle_details(puzzle)
+            puzzle = process_puzzle_detail(puzzle)
 
     with open(filepath, "w") as f:
         json.dump(puzzle_overview, f)

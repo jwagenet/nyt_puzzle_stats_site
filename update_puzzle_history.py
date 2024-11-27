@@ -44,12 +44,12 @@ def get_cookie():
     return cookie
 
 
-def update_puzzle_details(puzzle_overview, updated_overview):
+def update_puzzle_details(puzzle_overview, updated_overview, cookie):
     count = 0
     for updated in tqdm(updated_overview):
         for puzzle in puzzle_overview:
             if puzzle["print_date"] == updated["print_date"] and puzzle["solved"] != updated["solved"]:
-                puzzle.update(process_puzzle_detail(updated))
+                puzzle.update(process_puzzle_detail(updated, cookie))
                 count += 1
 
     if count:
@@ -69,8 +69,6 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
     4. If update_old and start_date outside existing add old puzzles to start of overview 
     """
 
-    start_date = get_date_obj(start_date)
-
     puzzles_solved = [get_date_obj(puzzle["print_date"]) for puzzle in puzzle_overview if puzzle["solved"]]
     oldest_solved = min(puzzles_solved)
 
@@ -86,25 +84,26 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
     newest_puzzle = max(puzzles_solved + puzzles_incomplete + puzzles_not_started)
     oldest_puzzle = min(puzzles_solved + puzzles_incomplete + puzzles_not_started)
 
-    update_start = min(puzzles_incomplete + puzzles_not_started)
-    update_end =  max(puzzles_incomplete + puzzles_not_started)
-    old_end = min([oldest_solved] + puzzles_not_started)
-
     if newest_puzzle < today:
         print("\nAdding new puzzles")
         new_overview = batch_process_puzzle_overview(puzzle_type, newest_puzzle + timedelta(days=1), today, cookie)
         for puzzle in tqdm(new_overview):
-            puzzle = process_puzzle_detail(puzzle)
+            puzzle = process_puzzle_detail(puzzle, cookie)
 
         puzzle_overview.extend(new_overview)
 
-    if update_start and update_end and update_start <= update_end:
+    if puzzles_incomplete + puzzles_not_started and update_start <= update_end:
+        update_start = min(puzzles_incomplete + puzzles_not_started)
+        update_end =  max(puzzles_incomplete + puzzles_not_started)
+
         print("\nUpdating incomplete and not started puzzles")
         puzzle_overview = update_puzzle_details(
             puzzle_overview,
-            batch_process_puzzle_overview(puzzle_type, update_start, update_end, cookie))
+            batch_process_puzzle_overview(puzzle_type, update_start, update_end, cookie),
+            cookie)
 
     if update_old:
+        old_end = min([oldest_solved] + puzzles_not_started)
         if old_end and oldest_puzzle <= old_end:
             print("\nUpdating old puzzles")
             puzzle_overview = update_puzzle_details(
@@ -115,7 +114,7 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
             print("\nAdding old puzzles")
             old_overview = batch_process_puzzle_overview(puzzle_type, start_date, oldest_puzzle - timedelta(days=1), cookie)
             for puzzle in tqdm(old_overview):
-                puzzle = process_puzzle_detail(puzzle)
+                puzzle = process_puzzle_detail(puzzle, cookie)
 
             puzzle_overview[:0] = old_overview
 
@@ -144,9 +143,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     puzzle_type = args.type
-    start_date = args.start_date
-    end_date = args.end_date
+    start_date = get_date_obj(args.start_date)
+    end_date = get_date_obj(args.end_date)
     update_old = args.update_old
+
+    print(start_date, end_date)
 
     cookie = get_cookie()
     filepath = f"{puzzle_type}-history.json"
@@ -161,7 +162,7 @@ if __name__ == "__main__":
         print(f"Fetching {puzzle_type} puzzle history for first time.")
         puzzle_overview = batch_process_puzzle_overview(puzzle_type, start_date, end_date, cookie)
         for puzzle in tqdm(puzzle_overview):
-            puzzle = process_puzzle_detail(puzzle)
+            puzzle = process_puzzle_detail(puzzle, cookie)
 
     with open(filepath, "w") as f:
         json.dump(puzzle_overview, f)

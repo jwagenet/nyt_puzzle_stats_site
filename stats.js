@@ -1,5 +1,5 @@
 // utility functions
-const timeHoursMinutes = timeSeconds => {
+function timeHoursMinutes(timeSeconds) {
     const hours = Math.floor(timeSeconds / 3600),
         minutes = Math.floor(timeSeconds % 3600 / 60),
         minutesPad = minutes < 10 ? "0".concat(minutes) : minutes,
@@ -7,9 +7,10 @@ const timeHoursMinutes = timeSeconds => {
         secondsPad = seconds < 10 ? "0".concat(seconds) : seconds;
 
     return hours > 0 ? [hours, minutesPad, secondsPad].join(":") : "".concat(minutes, ":").concat(secondsPad)
-},
+};
 
-setBarSize = (currentTime, fastestTime, slowestTime) => {
+
+function setBarSize(currentTime, fastestTime, slowestTime) {
     const scaleFactor = (currentTime - fastestTime) / (slowestTime - fastestTime);
 
     return {
@@ -18,8 +19,9 @@ setBarSize = (currentTime, fastestTime, slowestTime) => {
     }
 };
 
+
 // build stats display
-const updateStatsInfo = statsAndStreaks => {
+function updateStatsInfo(statsAndStreaks) {
     let {
         stats,
         streaks
@@ -49,8 +51,9 @@ const updateStatsInfo = statsAndStreaks => {
     }
 };
 
-var buildStatsSummary = statsInfo => {
-    let {
+
+function buildStatsSummary(statsInfo) {
+    const {
         puzzlesSolved,
         solveRate,
         currentStreak,
@@ -94,7 +97,8 @@ var buildStatsSummary = statsInfo => {
     return section;
 };
 
-var buildStatsDay = dayInfo => {
+
+function buildStatsDay(dayInfo) {
     const {
         label,
         isToday,
@@ -191,14 +195,14 @@ var buildStatsDay = dayInfo => {
             expanded.append(averageTimeElem, averageText);
 
         averageBar.append(condensed, expanded);
-
         singleDay.append(latestBar, bestDateElem, bestBar, averageBar);
     }
 
     return singleDay
 };
 
-var buildStatsDaily = statsInfo => {
+
+function buildStatsDaily(statsInfo) {
     const {
         byDay,
         fastestTime,
@@ -231,18 +235,20 @@ var buildStatsDaily = statsInfo => {
     return section
 };
 
-const applyEvent = () => {
+
+function applyEvent() {
     document.querySelectorAll(".single-day").forEach(element => {
         element.addEventListener("click", (() => {
             (element => {
                 let elementActive = (document.querySelectorAll(".active.single-day") || [])[0];
                 elementActive && elementActive.classList.remove("active"),
                 elementActive = element,
-                elementActive.classList.add("active")
+                elementActive.classList.add("active");
             })(element)
         }))
     })
 }
+
 
 const dummyStats = updateStatsInfo({
     stats: {
@@ -323,6 +329,7 @@ const dummyStats = updateStatsInfo({
     }
 });
 
+
 // execute stats display
 async function fetchStatsAndStreaks() {
     let statsAndStreaks = await fetch("./stats-and-streaks.json")
@@ -332,12 +339,14 @@ async function fetchStatsAndStreaks() {
     return statsAndStreaks
 };
 
+
 async function fetchPuzzleHistory() {
     let statsAndStreaks = await fetch("./mini-history.json")
         .then(response => response.json());
 
     return statsAndStreaks
 };
+
 
 function buildStatsContent(statsInfo) {
     const statsRoot = document.getElementById("stats-root");
@@ -352,6 +361,7 @@ function buildStatsContent(statsInfo) {
 
     applyEvent()
 };
+
 
 async function renderStatsContent(puzzleType = "mini") {
     const timeout = 5000;
@@ -369,6 +379,7 @@ async function renderStatsContent(puzzleType = "mini") {
     buildStatsContent(statsInfo)
 };
 
+
 // process scraped data
 function getMostRecentMonday() {
     const today = new Date();
@@ -381,12 +392,14 @@ function getMostRecentMonday() {
     return mostRecentMonday;
 };
 
+
 function isDateThisWeek(monday, dateToCheck) {
     const providedDate = new Date(dateToCheck);
     providedDate.setUTCHours(0, 0, 0, 0);
 
     return providedDate >= monday;
 };
+
 
 async function getStatsAndStreaksFromHistory() {
     const puzzleHistory = await fetchPuzzleHistory()
@@ -397,14 +410,14 @@ async function getStatsAndStreaksFromHistory() {
     }
 };
 
+
 function getStatsFromHistory(puzzleHistory) {
     const mostRecentMonday = getMostRecentMonday()
-    let groupedDays = []
-    let statsByDay = []
+    let groupedDays = [],
+        statsByDay = [];
 
     puzzleHistory.forEach(puzzle => {
-        let dayOfWeekInteger = puzzle.day_of_week_integer
-        dayOfWeekInteger = dayOfWeekInteger > 0 ? dayOfWeekInteger - 1 : 6
+        let dayOfWeekInteger = puzzle.day_of_week_integer > 0 ? puzzle.day_of_week_integer - 1 : 6;
 
         if (!groupedDays[dayOfWeekInteger]) {
             groupedDays[dayOfWeekInteger] = [];
@@ -414,19 +427,18 @@ function getStatsFromHistory(puzzleHistory) {
 
     groupedDays.forEach((day, i) => {
         const puzzlesAttempted = day.map(day => day.percent_filled > 0 ? 1 : 0)
-            .reduce((sum, number) => sum + number, 0);
+                .reduce((sum, number) => sum + number, 0),
+            puzzlesSolved = day.map(day => day.solved ? 1 : 0),
+            puzzleTimes = day.map(day => day.solving_seconds)
+                .filter((_, index) => puzzlesSolved[index]),
+            puzzleDatesText = day.map(day => day.print_date)
+                .filter((_, index) => puzzlesSolved[index]),
+            puzzleDates = puzzleDatesText.map(date => new Date(date).getTime()),
 
-        const puzzlesSolved = day.map(day => day.solved ? 1 : 0)
-        const puzzleTimes = day.map(day => day.solving_seconds)
-                                .filter((_, index) => puzzlesSolved[index]);
-        const puzzleDatesText = day.map(day => day.print_date)
-                                .filter((_, index) => puzzlesSolved[index]);
-
-        const puzzleDates = puzzleDatesText.map(date => new Date(date).getTime());
-        const bestTime = Math.min(...puzzleTimes);
-        const latestDateIndex = puzzleDates.indexOf(Math.max(...puzzleDates));
-        const latestDate = puzzleDatesText[latestDateIndex];
-        const latestTime = puzzleTimes[latestDateIndex];
+            bestTime = Math.min(...puzzleTimes),
+            latestDateIndex = puzzleDates.indexOf(Math.max(...puzzleDates)),
+            latestDate = puzzleDatesText[latestDateIndex],
+            latestTime = puzzleTimes[latestDateIndex];
 
         statsByDay.push({
             puzzles_attempted : puzzlesAttempted,
@@ -442,9 +454,9 @@ function getStatsFromHistory(puzzleHistory) {
     });
 
     const puzzlesSolved = statsByDay.map(statsByDay => statsByDay.avg_denominator)
-        .reduce((sum, number) => sum + number, 0);
-    const puzzlesAttempted = statsByDay.map(statsByDay => statsByDay.puzzles_attempted)
-    .reduce((sum, number) => sum + number, 0);
+            .reduce((sum, number) => sum + number, 0),
+        puzzlesAttempted = statsByDay.map(statsByDay => statsByDay.puzzles_attempted)
+            .reduce((sum, number) => sum + number, 0);
 
     return {
         longest_avg_time: Math.max(...statsByDay.map(statsByDay => statsByDay.avg_time)),

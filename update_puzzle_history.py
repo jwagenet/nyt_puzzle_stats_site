@@ -92,9 +92,10 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
 
         puzzle_overview.extend(new_overview)
 
-    if puzzles_incomplete + puzzles_not_started and update_start <= update_end:
-        update_start = min(puzzles_incomplete + puzzles_not_started)
-        update_end =  max(puzzles_incomplete + puzzles_not_started)
+    puzzles_update = puzzles_incomplete + puzzles_not_started
+    if puzzles_update != []:
+        update_start = min(puzzles_update)
+        update_end =  max(puzzles_update)
 
         print("\nUpdating incomplete and not started puzzles")
         puzzle_overview = update_puzzle_details(
@@ -104,11 +105,12 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
 
     if update_old:
         old_end = min([oldest_solved] + puzzles_not_started)
-        if old_end and oldest_puzzle <= old_end:
-            print("\nUpdating old puzzles")
+        if old_end != [] and oldest_puzzle < old_end:
+            print(f"\nUpdating old puzzles")
             puzzle_overview = update_puzzle_details(
                 puzzle_overview,
-                batch_process_puzzle_overview(puzzle_type, oldest_puzzle, old_end  - timedelta(days=1), cookie))
+                batch_process_puzzle_overview(puzzle_type, oldest_puzzle, old_end  - timedelta(days=1), cookie),
+                cookie)
 
         if update_old and start_date < oldest_puzzle:
             print("\nAdding old puzzles")
@@ -146,8 +148,6 @@ if __name__ == "__main__":
     start_date = get_date_obj(args.start_date)
     end_date = get_date_obj(args.end_date)
     update_old = args.update_old
-
-    print(start_date, end_date)
 
     cookie = get_cookie()
     filepath = f"{puzzle_type}-history.json"

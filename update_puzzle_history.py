@@ -8,6 +8,10 @@ from datetime import datetime, timedelta
 from tqdm import tqdm
 from dotenv import load_dotenv
 
+# local
+from stats_and_streaks import get_stats_and_streaks_from_history
+from template_writer import render_stats_and_streaks
+
 # remote
 from nyt_crossword_stats.fetch_puzzle_stats import DATE_FORMAT, login, batch_process_puzzle_overview, process_puzzle_detail
 
@@ -27,7 +31,7 @@ def get_cookie():
     password = os.getenv("NYT_PASSWORD")
     cookie = os.getenv("NYT_COOKIE")
     cookie_date = os.getenv("NYT_COOKIE_DATE")
-    if cookie_date == "": cookie_date = None
+    cookie_date = None if cookie_date == "" else cookie_date
     today = datetime.now()
 
     if not cookie_date or get_date_obj(cookie_date) < today - timedelta(days=1):
@@ -106,7 +110,7 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
     if update_old:
         old_end = min([oldest_solved] + puzzles_not_started)
         if old_end != [] and oldest_puzzle < old_end:
-            print(f"\nUpdating old puzzles")
+            print("\nUpdating old puzzles")
             puzzle_overview = update_puzzle_details(
                 puzzle_overview,
                 batch_process_puzzle_overview(puzzle_type, oldest_puzzle, old_end  - timedelta(days=1), cookie),
@@ -122,6 +126,27 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
 
     return puzzle_overview
 
+
+def fetch_puzzle_overview(puzzle_type, start_date, end_date, update_old=False):
+    cookie = get_cookie()
+    filepath = f"{puzzle_type}-history.json"
+
+    if os.path.exists(filepath):
+        with open(filepath, "r") as f:
+            puzzle_overview = json.load(f)
+
+        puzzle_overview = update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, update_old)
+
+    else:
+        print(f"Fetching {puzzle_type} puzzle history for first time.")
+        puzzle_overview = batch_process_puzzle_overview(puzzle_type, start_date, end_date, cookie)
+        for puzzle in tqdm(puzzle_overview):
+            puzzle = process_puzzle_detail(puzzle, cookie)
+
+    with open(filepath, "w") as f:
+        json.dump(puzzle_overview, f)
+
+    return puzzle_overview
 
 
 if __name__ == "__main__":
@@ -148,21 +173,10 @@ if __name__ == "__main__":
     start_date = get_date_obj(args.start_date)
     end_date = get_date_obj(args.end_date)
     update_old = args.update_old
+    filename = f"{args.type}-stats.html"
 
-    cookie = get_cookie()
-    filepath = f"{puzzle_type}-history.json"
+    puzzle_history = fetch_puzzle_overview(puzzle_type, start_date, end_date, update_old)
+    stats_and_streaks = get_stats_and_streaks_from_history(puzzle_history)
 
-    if os.path.exists(filepath):
-        with open(filepath, "r") as f:
-            puzzle_overview = json.load(f)
-
-        puzzle_overview = update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, update_old)
-
-    else:
-        print(f"Fetching {puzzle_type} puzzle history for first time.")
-        puzzle_overview = batch_process_puzzle_overview(puzzle_type, start_date, end_date, cookie)
-        for puzzle in tqdm(puzzle_overview):
-            puzzle = process_puzzle_detail(puzzle, cookie)
-
-    with open(filepath, "w") as f:
-        json.dump(puzzle_overview, f)
+    # print(stats_and_streaks)
+    render_stats_and_streaks(filename, puzzle_type, **stats_and_streaks)

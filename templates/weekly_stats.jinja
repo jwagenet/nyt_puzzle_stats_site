@@ -1,0 +1,27 @@
+{% block weekly_stats %}
+{% for day in stats_by_day %}
+<div class="single-day {{'active' if day['is_today'] else ''}}">
+    <p class="day-of-week"><span class="day-first">{{day['label'][:1]}}</span><span class="day-tail">{{day['label'][1:]}}</span></p>
+    <div class="time-bar today" style="height: {{day['latest_time_size']['height']}}px; width: {{day['latest_time_size']['width']}}px;">
+        <p class="time">{{day['latest_time_text']}}</p>
+        <p>{{'Today' if day['is_today'] else 'This Week'}}</p></div>
+    {% if day['best_date_text'] != "" %}
+    <p class="best-date" style="bottom: {{day['best_date_bottom']}}px; left: {{day['best_date_left']}}px;">{{day['best_date_text']}}</p>
+    {% endif %}
+    <div class="time-bar best" style="height: {{day['best_time_size']['height']}}px; width: {{day['best_time_size']['width']}}px;">
+        <p class="time">{{day['best_time_text']}}</p>
+        <p>Best</p></div>
+    <div class="time-bar average" style="height: {{day['average_time_size']['height']}}px; width: {{day['average_time_size']['weight']}}px;">
+        <div class="condensed">
+            <p>T <span class="time">{{day['latest_time_text']}}</span></p>
+            <p>B <span class="time">{{day['best_time_text']}}</span></p>
+            <p>A <span class="time">{{day['average_time_text']}}</span></p>
+        </div>
+        <div class="expanded">
+            <p class="time">{{day['average_time_text']}}</p>
+            <p>Average</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock weekly_stats %}

@@ -6,15 +6,15 @@
 	height: 15px;
 	width: 15px;
 	position: absolute;
-	top: 5px
+	top: 5px;
 }
 
 #stats-root {
-	position: relative
+	position: relative;
 }
 
 .stats-content {
-	margin: 85px auto 100px
+	margin: 85px auto 100px;
 }
 
 .stats-header {
@@ -23,7 +23,7 @@
     font-variation-settings:
         "wdth" 75;
 	text-align: center;
-	margin-bottom: 30px
+	margin-bottom: 30px;
 }
 
 .stats-subheader {
@@ -31,16 +31,18 @@
 	letter-spacing: .5px;
 	text-transform: uppercase;
 	text-align: center;
-	margin-bottom: 10px
+	margin-bottom: 10px;
 }
 
 #stats-overview {
-	text-align: center
+	text-align: center;
 }
 
 #stats-overview .container {
 	margin-top: 40px;
-	margin-bottom: 40px
+	margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
 }
 
 #stats-overview .single-stat {
@@ -49,39 +51,41 @@
 	height: 100%;
 	padding: 20px 10px;
 	position: relative;
-	width: 50%
+	width: 50%;
 }
 
 #stats-overview .single-stat h2 {
 	font-weight: 300;
 	font-size: 28px;
-	margin-bottom: 6px
+	margin-bottom: 6px;
 }
 
 #stats-overview .single-stat:first-of-type,
 #stats-overview .single-stat:nth-of-type(2) {
-	border-bottom: 1px solid #dcdcdc
+	border-bottom: 1px solid #dcdcdc;
 }
 
 #stats-overview .single-stat:nth-of-type(3) {
-	border-left: 1px solid #dcdcdc
+	border-left: 1px solid #dcdcdc;
 }
 
 #weekly-stats {
 	padding: 0;
-	width: 100%
+	width: 100%;
 }
 
 #weekly-stats .header {
 	overflow: hidden;
 	padding: 10px 0;
 	text-align: center;
-	width: 100%
+	width: 100%;
 }
 
 #weekly-stats .container {
 	border-top: 1px solid #dcdcdc;
-	text-align: center
+	text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 #weekly-stats .single-day {
@@ -92,27 +96,27 @@
 	position: relative;
 	text-align: center;
 	transition: height .3s;
-	width: 100%
+	width: 100%;
 }
 
 #weekly-stats .single-day .day-of-week {
 	font-weight: normal;
 	float: left;
-	margin-top: 28px
+	margin-top: 28px;
 }
 
 #weekly-stats .single-day .day-of-week .day-tail {
-	display: none
+	display: none;
 }
 
 #weekly-stats .single-day p {
 	margin: 0;
 	font-weight: 700;
-	white-space: nowrap
+	white-space: nowrap;
 }
 
 #weekly-stats .single-day p:before {
-	content: attr(data-day-letter)
+	content: attr(data-day-letter);
 }
 
 #weekly-stats .single-day .time-bar {
@@ -124,35 +128,35 @@
 	max-width: 100%;
 	padding: 8px 0 0 8px;
 	text-align: left;
-	transition: .3s
+	transition: .3s;
 }
 
 #weekly-stats .single-day .time-bar.best,
 #weekly-stats .single-day .time-bar.today {
-	display: none
+	display: none;
 }
 
 #weekly-stats .single-day .best-date {
-	display: none
+	display: none;
 }
 
 #weekly-stats .single-day .average {
 	position: absolute;
-	top: 0
+	top: 0;
 }
 
 #weekly-stats .single-day .average .expanded {
-	display: none
+	display: none;
 }
 
 #weekly-stats .single-day:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 #weekly-stats .single-day .condensed p {
 	font-weight: 700;
 	padding-left: 10px;
-	position: relative
+	position: relative;
 }
 
 #weekly-stats .single-day .condensed p:before {
@@ -162,34 +166,34 @@
 	left: 0;
 	position: absolute;
 	top: 5px;
-	width: 5px
+	width: 5px;
 }
 
 #weekly-stats .single-day .condensed p:first-of-type:before {
-	background-color: #f93aa7
+	background-color: #f93aa7;
 }
 
 #weekly-stats .single-day .condensed p:nth-of-type(2):before {
-	background-color: #ffc600
+	background-color: #ffc600;
 }
 
 #weekly-stats .single-day .condensed p:last-of-type:before {
-	background-color: #3f82fa
+	background-color: #3f82fa;
 }
 
 #weekly-stats .single-day .condensed .time {
-	font-weight: 200
+	font-weight: 200;
 }
 
 #weekly-stats .single-day.active {
 	box-shadow: 0 0 #fff, 0 0px #fff, -4px 0 4px 0px rgba(0, 0, 0, .2), 4px 0 4px 2px rgba(0, 0, 0, .2);
 	height: 150px;
-	z-index: 5
+	z-index: 5;
 }
 
 #weekly-stats .single-day.active .time-bar {
 	min-height: 50px !important;
-	max-height: 70px !important
+	max-height: 70px !important;
 }
 
 #weekly-stats .single-day.active .day-of-week {
@@ -198,33 +202,33 @@
 	font-weight: 700;
 	left: 10px;
 	position: absolute;
-	top: 50%
+	top: 50%;
 }
 
 #weekly-stats .single-day.active .day-of-week .day-tail {
-	display: inline
+	display: inline;
 }
 
 #weekly-stats .single-day.active .time-bar {
-	max-height: 50px !important
+	max-height: 50px !important;
 }
 
 #weekly-stats .single-day.active .time-bar.best,
 #weekly-stats .single-day.active .time-bar.today {
-	display: block
+	display: block;
 }
 
 #weekly-stats .single-day.active .average {
 	background-color: #3f82fa;
-	position: relative
+	position: relative;
 }
 
 #weekly-stats .single-day.active .average .expanded {
-	display: block
+	display: block;
 }
 
 #weekly-stats .single-day.active .condensed {
-	display: none
+	display: none;
 }
 
 #weekly-stats .single-day.active .best-date {
@@ -240,37 +244,37 @@
 	position: absolute;
 	top: 65px;
 	text-align: center;
-	width: 75px
+	width: 75px;
 }
 
 #weekly-stats .single-day .time {
-	font-family: "Noto Sans", Helvetica, Arial, sans-serif
+	font-family: "Noto Sans", Helvetica, Arial, sans-serif;
 }
 
 #weekly-stats .single-day .no-stats {
 	background: repeating-linear-gradient(-45deg, #f4f4f4, #f4f4f4 5px, #fff 5px, #fff 10px);
-	height: 70px
+	height: 70px;
 }
 
 #weekly-stats .single-day .today {
-	background-color: #f93aa7
+	background-color: #f93aa7;
 }
 
 #weekly-stats .single-day .best {
-	background-color: #ffc600
+	background-color: #ffc600;
 }
 
 #weekly-stats .single-day .average {
-	background-color: #2977d4
+	background-color: #2977d4;
 }
 
 @media only screen and (min-width: 768px) {
 	.icon-stats-streak {
-		top: 0
+		top: 0;
 	}
 
 	#stats-overview {
-		text-align: center
+		text-align: center;
 	}
 
 	#stats-overview .single-stat {
@@ -278,24 +282,24 @@
 		float: left;
 		height: 100%;
 		padding: 20px 10px;
-		width: 25%
+		width: 25%;
 	}
 
 	#stats-overview .single-stat:first-of-type {
-		border-left: 0
+		border-left: 0;
 	}
 
 	#stats-overview .single-stat:first-of-type,
 	#stats-overview .single-stat:nth-of-type(2) {
-		border-bottom: 0
+		border-bottom: 0;
 	}
 
 	#stats-overview .single-stat:last-of-type {
-		border-top: 0
+		border-top: 0;
 	}
 
 	#stats-overview .single-stat:nth-of-type(3) {
-		border-left: 1px solid #dcdcdc
+		border-left: 1px solid #dcdcdc;
 	}
 
 	#weekly-stats .single-day {
@@ -306,17 +310,17 @@
 		position: relative;
 		text-align: center;
 		transition: width .3s;
-		width: 80px
+		width: 80px;
 	}
 
 	#weekly-stats .single-day .day-of-week {
 		float: none;
-		margin-top: 0
+		margin-top: 0;
 	}
 
 	#weekly-stats .single-day p {
 		margin: 0;
-		font-weight: 700
+		font-weight: 700;
 	}
 
 	#weekly-stats .single-day .time-bar.time-bar.time-bar {
@@ -327,47 +331,47 @@
 		padding: 8px 0 0 8px;
 		position: absolute;
 		vertical-align: bottom;
-		width: 80px !important
+		width: 80px !important;
 	}
 
 	#weekly-stats .single-day .today {
-		left: 0
+		left: 0;
 	}
 
 	#weekly-stats .single-day .best-date {
-		display: none
+		display: none;
 	}
 
 	#weekly-stats .single-day .best {
-		left: 80px
+		left: 80px;
 	}
 
 	#weekly-stats .single-day .average {
 		left: 0;
-		top: auto
+		top: auto;
 	}
 
 	#weekly-stats .single-day .average .expanded {
-		display: none
+		display: none;
 	}
 
 	#weekly-stats .single-day:hover {
-		cursor: pointer
+		cursor: pointer;
 	}
 
 	#weekly-stats .single-day .condensed p {
-		font-weight: 200
+		font-weight: 200;
 	}
 
 	#weekly-stats .single-day .condensed .time {
-		font-weight: 700
+		font-weight: 700;
 	}
 
 	#weekly-stats .single-day.active {
 		box-shadow: 0 0 #fff, 0 6px #fff, -4px 0 4px -2px rgba(0, 0, 0, .2), 4px 0 4px -2px rgba(0, 0, 0, .2);
 		height: 315px;
 		width: 240px;
-		z-index: 2
+		z-index: 2;
 	}
 
 	#weekly-stats .single-day.active .day-of-week {
@@ -376,35 +380,35 @@
 		left: 0;
 		margin-top: 0;
 		position: relative;
-		top: 0
+		top: 0;
 	}
 
 	#weekly-stats .single-day.active p:before {
-		content: attr(data-day-full)
+		content: attr(data-day-full);
 	}
 
 	#weekly-stats .single-day.active .time-bar.time-bar.time-bar {
-		display: inline-block
+		display: inline-block;
 	}
 
 	#weekly-stats .single-day.active .average {
 		background-color: #3f82fa;
 		left: 160px;
-		position: absolute
+		position: absolute;
 	}
 
 	#weekly-stats .single-day.active .average .expanded {
-		display: block
+		display: block;
 	}
 
 	#weekly-stats .single-day.active .condensed {
-		display: none
+		display: none;
 	}
 
 	#weekly-stats .single-day.active .best-date.best-date.best-date {
 		bottom: auto;
 		left: 83px !important;
-		top: auto
+		top: auto;
 	}
 
 	#weekly-stats .single-day.active .best-date.best-date.best-date:after {
@@ -414,33 +418,33 @@
 		left: 32px;
 		border-top: 7px solid #dcdcdc;
 		border-left: 5px solid rgba(0, 0, 0, 0);
-		border-right: 5px solid rgba(0, 0, 0, 0)
+		border-right: 5px solid rgba(0, 0, 0, 0);
 	}
 
 	#weekly-stats .single-day .no-stats {
-		height: 300px
+		height: 300px;
 	}
 }
 
 @media only screen and (min-width: 960px)and (min-device-width: 960px) {
 	#weekly-stats .single-day {
-		width: 105px
+		width: 105px;
 	}
 
 	#weekly-stats .single-day .time-bar.time-bar.time-bar {
-		width: 105px !important
+		width: 105px !important;
 	}
 
 	#weekly-stats .single-day .best {
-		left: 105px
+		left: 105px;
 	}
 
 	#weekly-stats .single-day.active {
-		width: 315px
+		width: 315px;
 	}
 
 	#weekly-stats .single-day.active .average {
-		left: 210px
+		left: 210px;
 	}
 
 	#weekly-stats .single-day.active .best-date.best-date.best-date {
@@ -448,13 +452,13 @@
 		font-size: .8125rem;
 		left: 115px !important;
 		padding: 3px 8px;
-		width: 90px
+		width: 90px;
 	}
 
 	#weekly-stats .single-day.active .best-date.best-date.best-date:after {
 		left: 35px;
 		border-top: 9px solid #dcdcdc;
 		border-left: 7px solid rgba(0, 0, 0, 0);
-		border-right: 7px solid rgba(0, 0, 0, 0)
+		border-right: 7px solid rgba(0, 0, 0, 0);
 	}
 }

@@ -1,3 +1,5 @@
 .env
 *.json
 *.code-workspace
+*.html
+*.pyc

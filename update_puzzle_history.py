@@ -14,10 +14,10 @@ from template_writer import render_stats_and_streaks
 
 # remote
 from nyt_crossword_stats.fetch_puzzle_stats import DATE_FORMAT, login, batch_process_puzzle_overview, process_puzzle_detail
-
 load_dotenv()
 
 
+## helpers
 def get_date_str(date_object):
     return datetime.strftime(date_object, DATE_FORMAT)
 
@@ -48,7 +48,10 @@ def get_cookie():
     return cookie
 
 
+## fetch and update puzzles
 def update_puzzle_details(puzzle_overview, updated_overview, cookie):
+    """Wrapper to update existing puzzle details"""
+
     count = 0
     for updated in tqdm(updated_overview):
         for puzzle in puzzle_overview:
@@ -63,7 +66,8 @@ def update_puzzle_details(puzzle_overview, updated_overview, cookie):
 
 
 def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, update_old=False):
-    """
+    """Update existing puzzle history cache based on a strategy to reduce repeated calls
+
     Strategy:
     1. Always look for new puzzles and add to end of overview
     2. Always update changes to incomplete or not started puzzles within current set
@@ -128,6 +132,8 @@ def update_puzzle_overview(puzzle_overview, puzzle_type, start_date, cookie, upd
 
 
 def fetch_puzzle_overview(puzzle_type, start_date, end_date, update_old=False):
+    """Get puzzle history either by updating existing history cache or getting new history"""
+
     cookie = get_cookie()
     filepath = f"{puzzle_type}-history.json"
 
@@ -173,10 +179,7 @@ if __name__ == "__main__":
     start_date = get_date_obj(args.start_date)
     end_date = get_date_obj(args.end_date)
     update_old = args.update_old
-    filename = f"{args.type}-stats.html"
 
     puzzle_history = fetch_puzzle_overview(puzzle_type, start_date, end_date, update_old)
     stats_and_streaks = get_stats_and_streaks_from_history(puzzle_history)
-
-    # print(stats_and_streaks)
-    render_stats_and_streaks(filename, puzzle_type, **stats_and_streaks)
+    render_stats_and_streaks(puzzle_type, **stats_and_streaks)

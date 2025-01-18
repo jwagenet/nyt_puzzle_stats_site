@@ -1,16 +1,16 @@
+# standard
 import json
 import math
 from datetime import date, timedelta
 
 
 ## helpers
-def get_most_recent_monday():
+def is_date_this_week(date_to_check):
+    """Get most recent monday and check if supplied date is this week"""
     today = date.today()
     days_since_monday = (today.day + 6) % 7
-    return today - timedelta(days_since_monday)
+    monday = today - timedelta(days_since_monday)
 
-
-def is_date_this_week(monday, date_to_check):
     return date.fromisoformat(date_to_check) >= monday
 
 
@@ -28,6 +28,10 @@ def get_stats_and_streaks_from_history(puzzle_history=None):
 
 
 def get_stats_from_history(puzzle_history):
+    """Calculate stats from puzzle history
+    
+    Summarizes solved puzzle stats by day of week
+    """
     grouped_days = [[] for _ in range(7)]
 
     for puzzle in puzzle_history:
@@ -39,7 +43,6 @@ def get_stats_from_history(puzzle_history):
 
         grouped_days[day_of_week_integer].append(puzzle)
 
-    most_recent_monday = get_most_recent_monday()
     stats_by_day = []
     for grouped_day in grouped_days:
         puzzles_attempted = sum(
@@ -52,10 +55,12 @@ def get_stats_from_history(puzzle_history):
 
         avg_time = 0
         best_time = 0
-        best_date = 0
-        latest_date = 0
         latest_time = 0
         this_weeks_time = 0
+
+        # not sure what the actual null values are for these
+        best_date = 0
+        latest_date = 0
 
         if len(puzzles_solved):
             avg_time = math.ceil(sum(puzzle_times) / len(puzzle_times))
@@ -65,9 +70,8 @@ def get_stats_from_history(puzzle_history):
             latest_date = puzzle_dates_text[latest_date_index]
             latest_time = puzzle_times[latest_date_index]
             this_weeks_time = (
-                latest_time if is_date_this_week(most_recent_monday, latest_date) else 0
+                latest_time if is_date_this_week(latest_date) else 0
             )
-
 
         stats_by_day.append(
             {
@@ -97,5 +101,6 @@ def get_stats_from_history(puzzle_history):
 
 
 def get_streaks_from_history(puzzle_history):
+    """Calculate streaks from puzzle history"""
     # todo
     return {"current_streak": 0, "longest_streak": 0}
